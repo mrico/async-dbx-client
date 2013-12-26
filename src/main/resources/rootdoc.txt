@@ -1,0 +1,18 @@
+=== Akka/Spray-based Dropbox API client ===
+
+The main entry point is the [[asyncdbx.DbxClient]]. An instance of [[asyncdbx.DbxClient]]
+is linked to a single Dropbox account and provides access to the API.
+{{{
+import api._
+val client = system.actorOf(Props[DbxClient])
+client ! Authenticate(token)
+client ! Account.GetInfo // => Response: Account.Info
+}}}
+
+The actor [[asyncdbx.DbxSync]] can be used to keep a local folder in sync with
+a given Dropbox account.
+{{{
+val sync = system.actorOf(DbxSync.props(client, "/tmp/dbx"))
+// ... later ...
+sync ! PoisenPoll
+}}}
