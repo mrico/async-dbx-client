@@ -228,7 +228,7 @@ class DbxClient extends Actor with DbxApiCalls {
       }
 
     case Failure(ex) =>
-      log.error(ex)
+      log.error("", ex)
       receiver ! ex
   }
 }
