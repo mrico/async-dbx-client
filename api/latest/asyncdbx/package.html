@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>asyncdbx - asyncdbx - asyncdbx</title>
+          <meta name="description" content="asyncdbx - asyncdbx - asyncdbx" />
+          <meta name="keywords" content="asyncdbx asyncdbx asyncdbx" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../index.html';
+            var hash = 'asyncdbx.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../lib/package_big.png" />
+        
+        <h1>asyncdbx</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asyncdbx</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Akka/Spray-based Dropbox API client.</p><p>The main entry point is the <a href="DbxClient.html" class="extype" name="asyncdbx.DbxClient">DbxClient</a>. An instance of <a href="DbxClient.html" class="extype" name="asyncdbx.DbxClient">DbxClient</a>
+is linked to a single Dropbox account and provides access to the API.</p><pre><span class="kw">import</span> api._
+<span class="kw">val</span> client = system.actorOf(Props[DbxClient])
+client ! Authenticate(token)
+client ! Account.GetInfo <span class="cmt">// => Response: Account.Info</span></pre><p>The actor <a href="DbxSync.html" class="extype" name="asyncdbx.DbxSync">DbxSync</a> can be used to keep a local folder in sync with
+a given Dropbox account.</p><pre><span class="kw">val</span> sync = system.actorOf(DbxSync.props(client, <span class="lit">"/tmp/dbx"</span>))
+<span class="cmt">// ... later ...</span>
+sync ! PoisenPoll</pre></div><dl class="attributes block"> <dt>Version</dt><dd><p>0.1</p></dd><dt>See also</dt><dd><span class="cmt"><p><a href="http://spray.io" target="_blank">spray.io</a>
+</p></span><span class="cmt"><p><a href="http://akka.io" target="_blank">akka.io</a></p></span></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="asyncdbx"><span>asyncdbx</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="asyncdbx.DbxClient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DbxClientextendsActorwithDbxApiCalls"></a>
+      <a id="DbxClient:DbxClient"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DbxClient.html"><span class="name">DbxClient</span></a><span class="result"> extends <span class="extype" name="akka.actor.Actor">Actor</span> with <span class="extype" name="asyncdbx.DbxApiCalls">DbxApiCalls</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Actor-based Dropbox API client.</p>
+    </li><li name="asyncdbx.DbxSync" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DbxSyncextendsActor"></a>
+      <a id="DbxSync:DbxSync"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DbxSync.html"><span class="name">DbxSync</span></a><span class="result"> extends <span class="extype" name="akka.actor.Actor">Actor</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Keeps a local folder in sync with the provided Dropbox.</p>
+    </li><li name="asyncdbx.OAuthHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuthHandlerextendsActor"></a>
+      <a id="OAuthHandler:OAuthHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuthHandler.html"><span class="name">OAuthHandler</span></a><span class="result"> extends <span class="extype" name="akka.actor.Actor">Actor</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="asyncdbx.Settings" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SettingsextendsExtension"></a>
+      <a id="Settings:Settings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Settings.html"><span class="name">Settings</span></a><span class="result"> extends <span class="extype" name="akka.actor.Extension">Extension</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="asyncdbx.DbxSync" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DbxSync"></a>
+      <a id="DbxSync:DbxSync"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DbxSync$.html"><span class="name">DbxSync</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="asyncdbx.OAuthHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="OAuthHandler"></a>
+      <a id="OAuthHandler:OAuthHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="OAuthHandler$.html"><span class="name">OAuthHandler</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="asyncdbx.Settings" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Settings"></a>
+      <a id="Settings:Settings"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Settings$.html"><span class="name">Settings</span></a><span class="result"> extends <span class="extype" name="akka.actor.ExtensionId">ExtensionId</span>[<a href="Settings.html" class="extype" name="asyncdbx.Settings">Settings</a>] with <span class="extype" name="akka.actor.ExtensionIdProvider">ExtensionIdProvider</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="asyncdbx.api" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="api"></a>
+      <a id="api:api"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="api/package.html"><span class="name">api</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">Contains all public API messages.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../lib/template.js"></script>
+    </body>
+      </html>
