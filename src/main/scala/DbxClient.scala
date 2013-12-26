@@ -107,7 +107,7 @@ class DbxClient extends Actor with DbxApiCalls {
     case Data.GetDelta(cursorOption, pathPrefix) =>
       import Data.JsonProtocol._
 
-      val pipeline = logRequest(println(_)) ~> sendReceive ~> unmarshal[Data.Delta]
+      val pipeline = sendReceive ~> unmarshal[Data.Delta]
       var data = Map.empty[String, String]
       cursorOption.foreach(data += "cursor" -> _)
       pathPrefix.foreach(data += "path_prefix" -> _)
@@ -151,6 +151,56 @@ class DbxClient extends Actor with DbxApiCalls {
       val downloader = context.actorOf(DbxDownloader.props(token))
       downloader forward msg
 
+    case FileOps.CreateFolder(root, path) =>
+      import Data.JsonProtocol._
+
+      val pipeline = sendReceive ~> unmarshal[Data.Metadata]
+      val params = Map(
+        "root" -> root,
+        "path" -> path
+      )
+      val responseFuture = pipeline { AuthPost(token, "/fileops/create_folder", params) }
+      val receiver = context.sender
+      responseFuture onComplete {
+        case Success(meta) =>
+          receiver ! FileOps.FolderCreated(meta)
+
+        case Failure(ex: UnsuccessfulResponseException) =>
+          if (ex.response.status == StatusCodes.Forbidden) {
+            receiver ! FileOps.AlreadyExists(path)
+          } else {
+            receiver ! ex
+          }
+
+        case Failure(ex) =>
+          receiver ! ex
+      }
+
+    case FileOps.Delete(root, path) =>
+      import Data.JsonProtocol._
+
+      val pipeline = sendReceive ~> unmarshal[Data.Metadata]
+      val params = Map(
+        "root" -> root,
+        "path" -> path
+      )
+      val responseFuture = pipeline { AuthPost(token, "/fileops/delete", params) }
+      val receiver = context.sender
+      responseFuture onComplete {
+        case Success(meta) =>
+          receiver ! FileOps.Deleted(meta)
+
+        case Failure(ex: UnsuccessfulResponseException) =>
+          if (ex.response.status == StatusCodes.NotFound) {
+            receiver ! FileOps.NotFound(path)
+          } else {
+            receiver ! ex
+          }
+
+        case Failure(ex) =>
+          receiver ! ex
+      }
+
     case OAuth2.DisableAccessToken =>
       val sender = context.sender
       val pipeline = sendReceive
@@ -177,7 +227,8 @@ class DbxClient extends Actor with DbxApiCalls {
         receiver ! ex
       }
 
-    case Failure(error) =>
-      receiver ! error
+    case Failure(ex) =>
+      log.error(ex)
+      receiver ! ex
   }
 }
