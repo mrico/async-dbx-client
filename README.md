@@ -23,7 +23,7 @@ libraryDependencies += "eu.mrico" %% "async-dbx-client" % "0.1.0"
 
 ### Documentation
 
-[http://mrico.github.io/async-dbx-client/api/latest/](API documentation)
+The latest documentation of the API can be found [here](http://mrico.github.io/async-dbx-client/api/latest/).
 
 
 ## Copyright & Licence
