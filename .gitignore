@@ -1,3 +1,5 @@
 #sbt
 target/
 
+#tests
+/test-config.conf
