@@ -21,6 +21,11 @@ Then you can add the dependency to your sbt build configuration:
 libraryDependencies += "eu.mrico" %% "async-dbx-client" % "0.1.0"
 ```
 
+### Documentation
+
+[http://mrico.github.io/async-dbx-client/api/latest/](API documentation)
+
+
 ## Copyright & Licence
 
-Released under the MIT Licence.
+Copyright (c) 2013 Marco Rico Gomez. Released under the MIT Licence.
