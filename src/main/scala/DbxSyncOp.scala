@@ -78,17 +78,17 @@ private[asyncdbx] class DbxSyncOp(dbxClient: ActorRef, baseDir: File) extends Ac
   }
 
   def downloading(receiver: ActorRef, meta: Data.Metadata, channel: Option[WritableByteChannel] = None): Receive = {
-    case DownloadBegin(path) =>
+    case Data.DownloadBegin(path) =>
       log.info("Downloading {} ...", path)
       val file = resolveFile(new File(baseDir, path), isNew = true).get
       val channel = Files.newByteChannel(file.toPath, CREATE, TRUNCATE_EXISTING, WRITE)
       context.become(downloading(receiver, meta, Some(channel)))
 
-    case DownloadChunk(path, data) =>
+    case Data.DownloadChunk(path, data) =>
       channel.foreach(_.write(ByteBuffer.wrap(data)))
       receiver ! Alive
 
-    case DownloadEnd(path) =>
+    case Data.DownloadEnd(path) =>
       channel.foreach(_.close())
       val f = resolveFile(new File(baseDir, path)).get
       if (f.length == meta.bytes) {
@@ -142,7 +142,7 @@ private[asyncdbx] class DbxSyncOp(dbxClient: ActorRef, baseDir: File) extends Ac
 
   override val supervisorStrategy =
     OneForOneStrategy(maxNrOfRetries = 5, withinTimeRange = 1.minute) {
-      case _: DbxDownloader.DbxDownloadFailed => Escalate
+      case _: Data.DbxDownloadFailed => Escalate
       case _: Exception => Escalate
   }
 }

@@ -26,10 +26,11 @@ package asyncdbx
 package tests
 
 import scala.concurrent.duration._
-
+import java.io.File
 import akka.actor.ActorSystem
 import akka.actor.Actor
 import akka.actor.Props
+import akka.util.Timeout
 import akka.testkit.TestKit
 import org.scalatest.WordSpecLike
 import org.scalatest.Matchers
@@ -46,10 +47,13 @@ object DbxClientSpec {
 
 class DbxClientSpec extends TestKit(ActorSystem("DbxClientSpec")) with ImplicitSender
     with WordSpecLike with Matchers with BeforeAndAfterAll {
-
   import DbxClientSpec._
+
   val client = system.actorOf(Props[DbxClient])
   val testFolder = s"/DbxClientSpec-${System.currentTimeMillis}"
+  val localTestFile = new File(getClass.getResource("/image1.jpg").toURI())
+
+  implicit val timeout: Timeout = 30.seconds
 
   "An authenticated DbxClient" should {
     "be able to call 'account/info'" in {
@@ -94,6 +98,25 @@ class DbxClientSpec extends TestKit(ActorSystem("DbxClientSpec")) with ImplicitS
       client ! msg
       val exists = expectMsgType[FileOps.AlreadyExists]
       exists.path shouldBe testFolder
+    }
+
+    "be able to upload a file" in {
+      val path = s"${testFolder}/${localTestFile.getName}"
+      client ! Data.UploadFile(localTestFile, "sandbox", path)
+      val result = expectMsgType[Data.FileUploaded]
+      val meta = result.meta
+      meta.path shouldBe path
+      meta.bytes should equal (localTestFile.length)
+      meta.is_dir shouldBe false
+    }
+
+    "be able to download a file" in {
+      val path = s"${testFolder}/${localTestFile.getName}"
+      client ! Data.GetFile("sandbox", path)
+      expectMsgType[Data.DownloadBegin]
+      val chunk = expectMsgType[Data.DownloadChunk]
+      chunk.data should have size localTestFile.length
+      expectMsgType[Data.DownloadEnd]
     }
 
     "be able to delete a folder" in {

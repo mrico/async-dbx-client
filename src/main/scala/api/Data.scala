@@ -25,10 +25,20 @@ SOFTWARE.
 package asyncdbx
 package api
 
+import java.io.File
 import spray.json.{JsonFormat, DefaultJsonProtocol}
 
 /** Container for Data related messages. */
 object Data {
+  case class UploadFile(
+    localFile: File,
+    root: String,
+    path: String,
+    overwrite: Boolean = true,
+    prarentRev: Option[String] = None
+  )
+  case class FileUploaded(meta: Data.Metadata)
+
   /** Downloads a file.
     *
     * @param root 'dropbox' or 'sandbox'
@@ -37,6 +47,12 @@ object Data {
     * @see [[https://www.dropbox.com/developers/core/docs#files-GET]]
     */
   case class GetFile(root: String, path: String, rev: Option[String] = None) extends DbxRequest
+
+  case class DownloadBegin(path: String)
+  case class DownloadChunk(path: String, data: Array[Byte])
+  case class DownloadEnd(path: String)
+
+  class DbxDownloadFailed(cause: Throwable) extends RuntimeException(cause)
 
   /** Retrieve information about changed files and folders.
     *

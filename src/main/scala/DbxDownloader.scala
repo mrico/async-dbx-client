@@ -44,12 +44,6 @@ import HttpHeaders._
 
 
 private[asyncdbx] object DbxDownloader {
-  case class DownloadBegin(path: String)
-  case class DownloadChunk(path: String, data: Array[Byte])
-  case class DownloadEnd(path: String)
-
-  class DbxDownloadFailed(cause: Throwable) extends RuntimeException(cause)
-
   def props(token: String): Props = {
     Props(classOf[DbxDownloader], token)
   }
@@ -88,22 +82,22 @@ private[asyncdbx] class DbxDownloader(token: String) extends Actor with DbxApiCa
 
   def downloading(requestor: ActorRef, path: String): Receive = {
     case ChunkedResponseStart(_) =>
-      requestor ! DownloadBegin(path)
+      requestor ! Data.DownloadBegin(path)
 
     case MessageChunk(entity, _) =>
-      requestor ! DownloadChunk(path, entity.toByteArray)
+      requestor ! Data.DownloadChunk(path, entity.toByteArray)
 
     case HttpResponse(status, entity, _, _) =>
-      requestor ! DownloadBegin(path)
-      requestor ! DownloadChunk(path, entity.data.toByteArray)
-      requestor ! DownloadEnd(path)
+      requestor ! Data.DownloadBegin(path)
+      requestor ! Data.DownloadChunk(path, entity.data.toByteArray)
+      requestor ! Data.DownloadEnd(path)
       context.stop(self)
 
     case ChunkedMessageEnd(_, _) =>
-      requestor ! DownloadEnd(path)
+      requestor ! Data.DownloadEnd(path)
       context.stop(self)
 
     case Failure(ex) =>
-      throw new DbxDownloadFailed(ex)
+      throw new Data.DbxDownloadFailed(ex)
   }
 }

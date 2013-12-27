@@ -52,6 +52,16 @@ private[asyncdbx] trait DbxApiCalls {
     }
   }
 
+  object AuthPut {
+    def apply(token: String, base: Uri, path: String, data: HttpEntity = HttpEntity.Empty,
+      query: Map[String, String] = Map.empty) = {
+
+      val uri = Uri.from(path = path).resolvedAgainst(base).withQuery(query)
+      val headers = List(authHeader(token))
+      Put(uri).withEntity(data).withHeaders(headers)
+    }
+  }
+
   def endpoint(path: String) = {
     val p = Uri.from(path = s"/${settings.ApiVersion}${path}")
     p.resolvedAgainst(settings.ApiUri)

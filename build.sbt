@@ -12,6 +12,11 @@ scalaVersion := "2.10.3"
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature")
 
 
+// === Test configuration ==
+
+parallelExecution in Test := false
+
+
 // == API Documentation ==
 
 autoAPIMappings := true
