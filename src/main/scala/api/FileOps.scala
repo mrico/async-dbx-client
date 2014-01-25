@@ -36,6 +36,9 @@ object FileOps {
   case class Delete(root: String, path: String) extends DbxRequest
   case class Deleted(meta: Data.Metadata)
 
+  case class Move(root: String, fromPath: String, toPath: String) extends DbxRequest
+  case class Moved(meta: Data.Metadata)
+
   case class AlreadyExists(path: String)
   case class NotFound(path: String)
 }

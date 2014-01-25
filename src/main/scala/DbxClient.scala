@@ -205,6 +205,32 @@ class DbxClient extends Actor with DbxApiCalls {
           receiver ! ex
       }
 
+    case FileOps.Move(root, fromPath, toPath) =>
+      import Data.JsonProtocol._
+
+      val pipeline = sendReceive ~> unmarshal[Data.Metadata]
+      val params = Map(
+        "root" -> root,
+        "from_path" -> fromPath,
+        "to_path" ->toPath
+      )
+      val responseFuture = pipeline { AuthPost(token, "/fileops/move", params) }
+      val receiver = context.sender
+      responseFuture onComplete {
+        case Success(meta) =>
+          receiver ! FileOps.Moved(meta)
+        case Failure(ex: UnsuccessfulResponseException) =>
+          if (ex.response.status == StatusCodes.NotFound) {
+            receiver ! FileOps.NotFound(fromPath)
+          } else {
+            receiver ! ex
+          }
+
+        case Failure(ex) =>
+          receiver ! ex
+      }
+
+
     case OAuth2.DisableAccessToken =>
       val sender = context.sender
       val pipeline = sendReceive

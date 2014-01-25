@@ -119,6 +119,19 @@ class DbxClientSpec extends TestKit(ActorSystem("DbxClientSpec")) with ImplicitS
       expectMsgType[Data.DownloadEnd]
     }
 
+    "be able to move a file" in {
+      val path = s"${testFolder}/${localTestFile.getName}"
+      val newPath = s"${testFolder}/${localTestFile.getName}.moved"
+      client ! FileOps.Move("sandbox", path, newPath)
+      val result = expectMsgType[FileOps.Moved]
+      val meta = result.meta
+      meta.path shouldBe newPath
+      // not found
+      client ! FileOps.Move("sandbox", path, newPath)
+      val notFound = expectMsgType[FileOps.NotFound]
+      notFound.path shouldBe path
+    }
+
     "be able to delete a folder" in {
       val msg = FileOps.Delete("sandbox", testFolder)
       client ! msg
