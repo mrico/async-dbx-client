@@ -2,6 +2,8 @@
 
 Akka/Spray-based Dropbox API client.
 
+The status of the currently supported &amp; upcoming features can be found [here](https://github.com/mrico/async-dbx-client/issues/1).
+
 
 ## Getting Started using sbt
 
@@ -21,10 +23,10 @@ Then you can add the dependency to your sbt build configuration:
 libraryDependencies += "eu.mrico" %% "async-dbx-client" % "0.1.0"
 ```
 
+
 ### Documentation
 
 The latest documentation of the API can be found [here](http://mrico.github.io/async-dbx-client/api/latest/).
-
 
 ## Copyright & Licence
 
