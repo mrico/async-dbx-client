@@ -145,6 +145,15 @@ class DbxClientSpec extends TestKit(ActorSystem("DbxClientSpec")) with ImplicitS
       val notFound = expectMsgType[FileOps.NotFound]
       notFound.path shouldBe testFolder
     }
+
+    "be able to call '/revisions' for a file" in {
+      import spray.httpx._
+      val path = s"${testFolder}/${localTestFile.getName}"
+      client ! Data.GetRevisions("sandbox", path)
+      val resp = expectMsgType[Data.Revisions]
+      resp.revisions should not be empty
+      resp.revisions(0).is_deleted shouldBe Some(true)
+    }
   }
 
   "An unauthenticated DbxClient" should {

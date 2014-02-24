@@ -101,10 +101,18 @@ object Data {
     contents: Option[List[Metadata]]
   )
 
+  // https://www.dropbox.com/developers/core/docs#revisions
+  case class GetRevisions(
+    root: String,
+    path: String) extends DbxRequest
+
+  case class Revisions(revisions: List[Metadata])
+
   object JsonProtocol extends DefaultJsonProtocol {
     private val metadataJsonFormat: JsonFormat[Metadata] = lazyFormat(jsonFormat14(Metadata))
     implicit val metadata = rootFormat(metadataJsonFormat)
     implicit val deltaFormat = jsonFormat4(Delta)
     implicit val longpollDelta = jsonFormat2(LongpollDelta)
+    implicit val revisionsFormat = jsonFormat1(Revisions)
   }
 }

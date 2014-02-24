@@ -147,6 +147,13 @@ class DbxClient extends Actor with DbxApiCalls {
       val responseFuture = pipeline { AuthGet(token, s"/metadata/${root}/${path}") }
       responseFuture onComplete reply(context.sender)
 
+    case Data.GetRevisions(root, path) =>
+      import Data.JsonProtocol._
+
+      val pipeline = sendReceive ~> unmarshal[List[Data.Metadata]]
+      val responseFuture = pipeline { AuthGet(token, s"/revisions/${root}/${path}") }
+      responseFuture.map(rev => Data.Revisions(rev)) onComplete reply(context.sender)
+
     case msg: Data.GetFile =>
       val downloader = context.actorOf(DbxDownloader.props(token))
       downloader forward msg
