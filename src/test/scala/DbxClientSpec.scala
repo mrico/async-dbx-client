@@ -146,13 +146,18 @@ class DbxClientSpec extends TestKit(ActorSystem("DbxClientSpec")) with ImplicitS
       notFound.path shouldBe testFolder
     }
 
-    "be able to call '/revisions' for a file" in {
+    "be able to call '/revisions' for a deleted file and restore it" in {
       import spray.httpx._
       val path = s"${testFolder}/${localTestFile.getName}"
       client ! Data.GetRevisions("sandbox", path)
       val resp = expectMsgType[Data.Revisions]
       resp.revisions should not be empty
       resp.revisions(0).is_deleted shouldBe Some(true)
+
+      val revision = resp.revisions(0).rev
+
+      client ! Data.Restore("sandbox", path, revision.get)
+      expectMsgType[Data.Restored]
     }
   }
 
@@ -188,6 +193,7 @@ class DbxClientSpec extends TestKit(ActorSystem("DbxClientSpec")) with ImplicitS
   }
 
   override def afterAll() {
+    client ! FileOps.Delete("sandbox", testFolder)
     shutdown(system)
   }
 }

@@ -98,6 +98,7 @@ object Data {
     client_mtime: Option[String],
     root: String,
     mimeType: Option[String],
+    revision: Option[Int],
     contents: Option[List[Metadata]]
   )
 
@@ -108,11 +109,20 @@ object Data {
 
   case class Revisions(revisions: List[Metadata])
 
+  // https://www.dropbox.com/developers/core/docs#restore
+  case class Restore(
+    root: String,
+    path: String,
+    rev: String) extends DbxRequest
+
+  case class Restored(meta: Metadata)
+
   object JsonProtocol extends DefaultJsonProtocol {
-    private val metadataJsonFormat: JsonFormat[Metadata] = lazyFormat(jsonFormat14(Metadata))
+    private val metadataJsonFormat: JsonFormat[Metadata] = lazyFormat(jsonFormat15(Metadata))
     implicit val metadata = rootFormat(metadataJsonFormat)
     implicit val deltaFormat = jsonFormat4(Delta)
     implicit val longpollDelta = jsonFormat2(LongpollDelta)
     implicit val revisionsFormat = jsonFormat1(Revisions)
+    implicit val restoreFormat = jsonFormat3(Restore)
   }
 }
