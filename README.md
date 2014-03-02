@@ -46,7 +46,7 @@ The actor [DbxSync](http://mrico.github.io/async-dbx-client/api/latest/#asyncdbx
 ```scala
 val sync = system.actorOf(DbxSync.props(client, "/tmp/dbx"))
 // ... later ...
-sync ! PoisenPoll
+sync ! PoisenPill
 ```
 
 
