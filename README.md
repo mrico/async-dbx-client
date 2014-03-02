@@ -23,10 +23,32 @@ Then you can add the dependency to your sbt build configuration:
 libraryDependencies += "eu.mrico" %% "async-dbx-client" % "0.1.0"
 ```
 
-
-### Documentation
+## Documentation
 
 The latest documentation of the API can be found [here](http://mrico.github.io/async-dbx-client/api/latest/).
+
+
+### Connecting to a Dropbox account
+
+The main entry point is the [DbxClient](http://mrico.github.io/async-dbx-client/api/latest/#asyncdbx.DbxClient). An instance of [DbxClient](http://mrico.github.io/async-dbx-client/api/latest/#asyncdbx.DbxClient) is linked to a single Dropbox account and provides access to the API.
+
+```scala
+import api._
+val client = system.actorOf(Props[DbxClient])
+client ! Authenticate(token)
+client ! Account.GetInfo // => Response: Account.Info
+```
+
+### Keeping a local folder in sync with remote changes
+
+The actor [DbxSync](http://mrico.github.io/async-dbx-client/api/latest/#asyncdbx.DbxSync) can be used to keep a local folder in sync with a given Dropbox account.
+
+```scala
+val sync = system.actorOf(DbxSync.props(client, "/tmp/dbx"))
+// ... later ...
+sync ! PoisenPoll
+```
+
 
 ## Copyright & Licence
 
