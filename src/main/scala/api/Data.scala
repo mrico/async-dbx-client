@@ -37,7 +37,8 @@ object Data {
     path: String,
     overwrite: Boolean = true,
     prarentRev: Option[String] = None
-  )
+  ) extends DbxRequest
+
   case class FileUploaded(meta: Data.Metadata)
 
   /** Downloads a file.
@@ -123,7 +124,7 @@ object Data {
     path: String,
     query: String,
     fileLimit: Option[Int] = None,
-    includeDeleted: Boolean = false)
+    includeDeleted: Boolean = false) extends DbxRequest
 
   case class SearchResult(files: List[Metadata])
 
