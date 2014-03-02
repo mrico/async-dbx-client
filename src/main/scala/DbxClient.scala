@@ -162,6 +162,19 @@ class DbxClient extends Actor with DbxApiCalls {
       val responseFuture = pipeline { AuthPost(token, s"/restore/${root}/${path}", data) }
       responseFuture.map(meta => Data.Restored(meta)) onComplete reply(context.sender)
 
+    case Data.Search(root, path, query, fileLimit, includeDeleted) =>
+      import Data.JsonProtocol._
+
+      val pipeline = sendReceive ~> unmarshal[List[Data.Metadata]]
+      var data = Map(
+        "query" -> query,
+        "include_deleted" -> includeDeleted.toString
+      )
+      fileLimit.foreach(data += "file_limit" -> _.toString)
+
+      val responseFuture = pipeline { AuthPost(token, s"/search/${root}/${path}", data) }
+      responseFuture.map(meta => Data.SearchResult(meta)) onComplete reply(context.sender)
+
     case msg: Data.GetFile =>
       val downloader = context.actorOf(DbxDownloader.props(token))
       downloader forward msg

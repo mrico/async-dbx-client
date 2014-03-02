@@ -117,6 +117,16 @@ object Data {
 
   case class Restored(meta: Metadata)
 
+  // https://www.dropbox.com/developers/core/docs#search
+  case class Search(
+    root: String,
+    path: String,
+    query: String,
+    fileLimit: Option[Int] = None,
+    includeDeleted: Boolean = false)
+
+  case class SearchResult(files: List[Metadata])
+
   object JsonProtocol extends DefaultJsonProtocol {
     private val metadataJsonFormat: JsonFormat[Metadata] = lazyFormat(jsonFormat15(Metadata))
     implicit val metadata = rootFormat(metadataJsonFormat)
@@ -124,5 +134,6 @@ object Data {
     implicit val longpollDelta = jsonFormat2(LongpollDelta)
     implicit val revisionsFormat = jsonFormat1(Revisions)
     implicit val restoreFormat = jsonFormat3(Restore)
+    implicit val searchFormat = jsonFormat5(Search)
   }
 }

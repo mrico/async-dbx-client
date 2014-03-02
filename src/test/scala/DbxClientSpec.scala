@@ -159,6 +159,12 @@ class DbxClientSpec extends TestKit(ActorSystem("DbxClientSpec")) with ImplicitS
       client ! Data.Restore("sandbox", path, revision.get)
       expectMsgType[Data.Restored]
     }
+
+    "be able to call '/search'" in {
+      client ! Data.Search("sandbox", "/", "DbxClientSpec", includeDeleted = true)
+      val resp = expectMsgType[Data.SearchResult]
+      resp.files should not be empty
+    }
   }
 
   "An unauthenticated DbxClient" should {
