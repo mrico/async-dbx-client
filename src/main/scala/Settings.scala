@@ -40,7 +40,7 @@ class Settings(config: Config) extends Extension {
   val AppSecret: String = config.getString("dropbox.app-secret")
   val OAuth2RedirectUri: Uri = Uri(config.getString("dropbox.oauth2.redirect-uri"))
   val SyncTimeout: Duration =
-    Duration(config.getMilliseconds("dropbox.sync-timeout"),
+    Duration(config.getDuration("dropbox.sync-timeout", TimeUnit.MILLISECONDS),
     TimeUnit.MILLISECONDS)
   val ApiUri: Uri = Uri(config.getString("dropbox.endpoints.api-uri"))
   val NotifyUri: Uri = Uri(config.getString("dropbox.endpoints.notify-uri"))
