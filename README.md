@@ -27,6 +27,7 @@ libraryDependencies += "eu.mrico" %% "async-dbx-client" % "0.1.0"
 
 The latest documentation of the API can be found [here](http://mrico.github.io/async-dbx-client/api/latest/).
 
+Examples can be found in the [test suite](src/test/scala/DbxClientSpec.scala).
 
 ### Connecting to a Dropbox account
 
@@ -49,7 +50,24 @@ val sync = system.actorOf(DbxSync.props(client, "/tmp/dbx"))
 sync ! PoisenPill
 ```
 
+### Running the test suite
+
+Sign in to your dropbox account and [create a new app](https://www.dropbox.com/developers/apps).
+
+Generate a new access token and put it into a file called `test-config.conf` which you create in the project folder:
+
+```
+tests {
+  auth-token = "YOUR_DROPBOX_ACCESS_TOKEN"
+}
+```
+
+Finally run the tests:
+
+```bash
+$> sbt test
+```
 
 ## Copyright & Licence
 
-Copyright (c) 2013 Marco Rico Gomez. Released under the MIT Licence.
+Copyright (c) 2016 Marco Rico Gomez. Released under the MIT Licence.
