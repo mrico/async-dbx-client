@@ -2,10 +2,9 @@ name := "async-dbx-client"
 
 organization := "eu.mrico"
 
-version := "0.1.0"
+version := "0.2.0"
 
-scalaVersion := "2.10.3"
-
+scalaVersion := "2.11.8"
 
 // == Compiler configuration ==
 
@@ -32,17 +31,18 @@ resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/release
 
 resolvers += "spray repo" at "http://repo.spray.io"
 
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.0"
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.13"
 
-libraryDependencies += "io.spray" % "spray-can" % "1.3.0"
+libraryDependencies += "io.spray" %% "spray-can" % "1.3.1"
 
-libraryDependencies += "io.spray" % "spray-client" % "1.3.0"
+libraryDependencies += "io.spray" %% "spray-client" % "1.3.1"
 
-libraryDependencies += "io.spray" %%  "spray-json" % "1.2.5"
+libraryDependencies += "io.spray" %%  "spray-json" % "1.3.2"
 
+libraryDependencies += "org.scala-lang.modules"  %% "scala-xml" % "1.0.0"
 
 // == Test Dependencies ==
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.1.0" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 
-libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.3.0" % "test"
+libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.4.2" % "test"
